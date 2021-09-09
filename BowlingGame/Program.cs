@@ -4,72 +4,132 @@ namespace BowlingGame
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            int total_score = 0;
-            int frame_1 = 0;
-            int frame_2 = 0;
-            int frame_3 = 0;
-            int frame_4 = 0;
-            int frame_5 = 0;
-            int frame_6 = 0;
-            int frame_7 = 0;
-            int frame_8 = 0;
-            int frame_9 = 0;
-            int frame_10 = 0;
-            for (int i = 0; i < 10; i++)
+            bool playing = true;
+            while (playing)
             {
-                bool strike = false;
-                bool spare = false;
-                Random rd = new Random();
-                int rand_num_1 = rd.Next(0, 11);
-                if (rand_num_1 == 10)
+                string are_we_rand = "";
+                while (are_we_rand != "I" && are_we_rand != "R")
                 {
-                    strike = true;
+                    Console.WriteLine("Would you like to use random rolls or input rolls? (R/I)");
+                    are_we_rand = Console.ReadLine();
                 }
-                else
+                Console.Clear();
+                int total_score = 0;
+                int[] roll_1 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+                int[] roll_2 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+                int[] frame_score = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int roll_3 = 0;
+                for (int i = 0; i < 10; i++)
                 {
-                    int rand_num_2 = rd.Next(0, (10 - rand_num_1) + 1);
-                    Console.WriteLine($"{rand_num_1}  {rand_num_2}");
-                    if (rand_num_1 + rand_num_2 == 10 && strike == false)
+                    Random rd = new Random();
+                    if (are_we_rand == "I")
                     {
-                        spare = true;
+                        string get_roll = "";
+                        while (roll_1[i] <= -1 || roll_1[i] >= 11)
+                        {
+                            get_roll = Console.ReadLine();
+                            roll_1[i] = Int16.Parse(get_roll);
+                        }
+                        if (roll_1[i] != 10)
+                        {
+                            while (roll_2[i] <= -1 || roll_2[i] + roll_1[i] >= 11)
+                            {
+                                get_roll = Console.ReadLine();
+                                roll_2[i] = Int16.Parse(get_roll);
+                            }
+                        }
                     }
-                    if (i == 0 && strike == false && spare == false)
+                    if (are_we_rand == "R")
                     {
-                       frame_1 = rand_num_1 + rand_num_2; }
-                    if (i == 1 && strike == false && spare == false)
+                        roll_1[i] = rd.Next(0, 11);
+                        roll_2[i] = rd.Next(0, (10 - roll_1[i]) + 1);
+                    }
+
+                    if (roll_1[i] == 10)
                     {
-                       frame_2 = rand_num_1 + rand_num_2; }
-                    if (i == 2 && strike == false && spare == false)
+                        roll_2[i] = 0;
+                    }
+                    if (i != 0 && roll_1[i - 1] + roll_2[i - 1] == 10 && roll_1[i - 0] != 10) //spare logic
                     {
-                       frame_3 = rand_num_1 + rand_num_2; }
-                    if (i == 3 && strike == false && spare == false)
+                        frame_score[i - 1] += roll_1[i];
+                    }
+                    if (i != 0 && roll_1[i - 1] == 10) //strike logic
                     {
-                       frame_4 = rand_num_1 + rand_num_2; }
-                    if (i == 4 && strike == false && spare == false)
+                        frame_score[i - 1] += roll_1[i] + roll_2[i];
+                    }
+
+                    if (i == 9 && roll_1[i] + roll_2[i] == 10 && roll_1[i] != 10) //final frame spare
                     {
-                       frame_5 = rand_num_1 + rand_num_2; }
-                    if (i == 5 && strike == false && spare == false)
+                        if (are_we_rand == "I")
+                        {
+                            string get_roll = "";
+                            while (roll_3 <= -1 || roll_3 >= 11)
+                            {
+                                get_roll = Console.ReadLine();
+                                roll_3 = Int16.Parse(get_roll);
+                            }
+                        }
+                        if (are_we_rand == "R")
+                        {
+                            roll_3 = rd.Next(0, 11);
+                        }
+                    }
+                    if (i == 9 && roll_1[i] == 10) //final frame strike
                     {
-                       frame_6 = rand_num_1 + rand_num_2; }
-                    if (i == 6 && strike == false && spare == false)
-                    {
-                       frame_7 = rand_num_1 + rand_num_2; }
-                    if (i == 7 && strike == false && spare == false)
-                    {
-                       frame_8 = rand_num_1 + rand_num_2; }
-                    if (i == 8 && strike == false && spare == false)
-                    {
-                       frame_9 = rand_num_1 + rand_num_2; }
-                    if (i == 9 && strike == false && spare == false)
-                    {
-                       frame_10 = rand_num_1 + rand_num_2; }
+                        if (are_we_rand == "I")
+                        {
+                            string get_roll = "";
+                            while (roll_2[i] <= -1 || roll_2[i] + roll_1[i] >= 11)
+                            {
+                                get_roll = Console.ReadLine();
+                                roll_2[i] = Int16.Parse(get_roll);
+                            }
+                            while (roll_3 <= -1 || roll_3 >= 11)
+                            {
+                                get_roll = Console.ReadLine();
+                                roll_3 = Int16.Parse(get_roll);
+                            }
+                        }
+                        if (are_we_rand == "R")
+                        {
+                            roll_2[i] = rd.Next(0, 11);
+                            roll_3 = rd.Next(0, 11);
+                        }
+                    }
+                    total_score += roll_1[i] + roll_2[i] + roll_3;
+                    frame_score[i] = roll_1[i] + roll_2[i] + roll_3;
                 }
-                
+                Console.Clear();
+                Console.WriteLine("    1st   2nd   3rd   Frame");
+                Console.WriteLine("-----------------------------");
+                for (int j = 0; j < 10; j++)
+                {
+                    if (j != 9)
+                    {
+                        Console.Write($"{j + 1}) ");
+                        Console.WriteLine($"{roll_1[j]}     {roll_2[j]}            {frame_score[j]}");
+                    }
+                    else
+                    {
+                        Console.Write($"{j + 1}) ");
+                        Console.WriteLine($"{roll_1[j]}     {roll_2[j]}     {roll_3}      {frame_score[j]}");
+                    }
+                }
+                Console.WriteLine(total_score);
+                string play_again = "";
+                while (play_again != "Y" && play_again != "N")
+                {
+                    Console.WriteLine("Would you like to play again? (Y/N)");
+                    play_again = Console.ReadLine();
+                    Console.Clear();
+                }
+                if (play_again == "N")
+                {
+                    playing = false;
+                }
             }
-            total_score = frame_1 + frame_2 + frame_3 + frame_4 + frame_5 + frame_6 + frame_7 + frame_8 + frame_9 + frame_10;
-            Console.WriteLine(total_score);
         }
     }
 }
