@@ -18,183 +18,154 @@ namespace BowlingGame
             }
             Console.Clear();
             int total_score = 0;
-            int[] roll_1 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-            int[] roll_2 = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
-            int[] frame_score = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            int roll_3 = -1;
-            int i;
-            for (i = 0; i < 10; i++)
+            var frames = new List<Frame>();
+            //int i;
+            //var f_rame = new Frame();
+            for (var i = 0; i < 10; i++)
             {
+                var frame = new Frame();
+                frames.Add(frame);
                 Random rd = new Random();
                 if (are_we_rand == "I")
                 {
-                    roll_ball_1(roll_1, i);
-                    roll_ball_2(roll_1, roll_2, i);
+                    roll_ball_1(frame);
+                    roll_ball_2(frame);
                 }
 
                 if (are_we_rand == "R")
                 {
-                    roll_1[i] = rd.Next(0, 11);
-                    roll_2[i] = rd.Next(0, (10 - roll_1[i]) + 1);
+                    frame.roll_1 = rd.Next(0, 11);
+                    frame.roll_2 = rd.Next(0, (10 - frame.roll_1) + 1);
                 }
 
-                if (roll_1[i] == 10)
+                if (frame.roll_1 == 10)
                 {
-                    roll_2[i] = 0;
+                    frame.roll_2 = 0;
                 }
-                sparestrike(i, roll_1, roll_2, frame_score);
-                finalspare(i, roll_1, roll_2, are_we_rand, roll_3);
-                finalstrike(i, roll_1, roll_2, are_we_rand, roll_3);
-                /*
-                if (i == 9 && roll_1[i] + roll_2[i] == 10 && roll_1[i] != 10) //final frame spare
-                    {
-                        if (are_we_rand == "I")
-                        {
-                            string get_roll = "";
-                            while (roll_3 <= -1 || roll_3 >= 11)
-                            {
-                                get_roll = Console.ReadLine();
-                                roll_3 = Int16.Parse(get_roll);
-                            }
-                        }
-                        if (are_we_rand == "R")
-                        {
-                            roll_3 = rd.Next(0, 11);
-                        }
-                    }
-                */
-                /*
-                if (i == 9 && roll_1[i] == 10) //final frame strike
+                if (i != 0)
                 {
-                    if (are_we_rand == "I")
-                    {
-                        roll_ball_2(roll_1, roll_2, i);
-                        string get_roll = "";
-                        while (roll_3 <= -1 || roll_3 >= 11)
-                        {
-                            get_roll = Console.ReadLine();
-                            roll_3 = Int16.Parse(get_roll);
-                        }
-                    }
-                    if (are_we_rand == "R")
-                    {
-                        roll_2[i] = rd.Next(0, 11);
-                        roll_3 = rd.Next(0, 11);
-                    }
+                    sparestrike(frame, frames.ElementAt(i - 1));
                 }
-                */
-                total_score += roll_1[i] + roll_2[i] + roll_3;
-                frame_score[i] = roll_1[i] + roll_2[i] + roll_3;
+                if (i == 9)
+                {
+                    finalspare(frame, are_we_rand);
+                    finalstrike(frame, are_we_rand);
+                }
+                total_score += frame.roll_1 + frame.roll_2 + (frame.roll_3 + 1);                //final frame exception needed
+                frame.frame_score = frame.roll_1 + frame.roll_2 + (frame.roll_3 + 1);
             }
             Console.Clear();
             Console.WriteLine("    1st   2nd   3rd   Frame");
             Console.WriteLine("-----------------------------");
-            display_score(i, roll_1, roll_2, frame_score, roll_3);
+            display_score(frames);
             Console.WriteLine(total_score);
             //again(playing);
         }
 
 
-        int sparestrike(int j, int[] roll1, int[] roll2, int[] frame)
+        int sparestrike(Frame frame, Frame previous_frame)
         {
-            if (j != 0 && roll1[j - 1] + roll2[j - 1] == 10 && roll1[j - 1] != 10)
+            if (previous_frame.roll_1 + previous_frame.roll_2 == 10 && previous_frame.roll_1 != 10)
             {
-                frame[j - 1] += roll1[j];
+                previous_frame.frame_score += frame.roll_1;
             }
-            if (j != 0 && roll1[j - 1] == 10)
+            if (previous_frame.roll_1 == 10)
             {
-                frame[j - 1] += roll1[j] + roll2[j];
+                previous_frame.frame_score += previous_frame.roll_1 + previous_frame.roll_2;
             }
             return 0;
         }
-        static int finalspare(int j, int[] roll1, int[] roll2, string que_rand, int roll3)
+
+        static int finalspare(Frame frame, string que_rand)
         {
             Random rd = new Random();
-            if (j == 9 && roll1[j] + roll2[j] == 10 && roll1[j] != 10) //final frame spare
+            if (frame.roll_1 + frame.roll_2 == 10 && frame.roll_1 != 10) //final frame spare
             {
                 if (que_rand == "I")
                 {
                     string get_roll = "";
-                    while (roll3 <= -1 || roll3 >= 11)
+                    while (frame.roll_3 <= -1 || frame.roll_3 >= 11)
                     {
                         get_roll = Console.ReadLine();
-                        roll3 = Int16.Parse(get_roll);
+                        frame.roll_3 = Int16.Parse(get_roll);
                     }
                 }
                 if (que_rand == "R")
                 {
-                    roll3 = rd.Next(0, 11);
+                    frame.roll_3 = rd.Next(0, 11);
                 }
             }
             return 0;
         }
 
-        static int finalstrike(int j, int[] roll1, int[] roll2, string que_rand, int roll3)
+        static int finalstrike(Frame frame, string que_rand)
         {
             Random rd = new Random();
-            if (j == 9 && roll1[j] == 10) //final frame strike
+            if (frame.roll_1 == 10) //final frame strike
             {
                 if (que_rand == "I")
                 {
                     string get_roll = "";
-                    while (roll2[j] <= -1 || roll2[j] + roll1[j] >= 11)
+                    while (frame.roll_2 <= -1 || frame.roll_2 + frame.roll_1 >= 11)
                     {
                         get_roll = Console.ReadLine();
-                        roll2[j] = Int16.Parse(get_roll);
+                        frame.roll_2 = Int16.Parse(get_roll);
                     }
-                    while (roll3 <= -1 || roll3 >= 11)
+                    while (frame.roll_3 <= -1 || frame.roll_3 >= 11)
                     {
                         get_roll = Console.ReadLine();
-                        roll3 = Int16.Parse(get_roll);
+                        frame.roll_3 = Int16.Parse(get_roll);
                     }
                 }
                 if (que_rand == "R")
                 {
-                    roll2[j] = rd.Next(0, 11);
-                    roll3 = 5; //rd.Next(0, 11);
+                    frame.roll_2 = rd.Next(0, 11);
+                    frame.roll_3 = 5; //rd.Next(0, 11);
                 }
             }
             return 0;
         }
 
-        int roll_ball_1(int[] roll1, int j)
+        int roll_ball_1(Frame frame)
         {
             string get_roll = "";
-            while (roll1[j] <= -1 || roll1[j] >= 11)
+            while (frame.roll_1 <= -1 || frame.roll_1 >= 11)
             {
                 get_roll = Console.ReadLine();
-                roll1[j] = Int16.Parse(get_roll);
+                frame.roll_1 = Int16.Parse(get_roll);
             }
             return 0;
         }
 
-        int roll_ball_2(int[] roll1, int[] roll2, int j)
+        int roll_ball_2(Frame frame)
         {
-            if (roll1[j] != 10)
+            
+            if (frame.roll_1 != 10)
             {
                 string get_roll = "";
-                while (roll2[j] <= -1 || roll2[j] + roll1[j] >= 11)
+                while (frame.roll_2 <= -1 || frame.roll_2 + frame.roll_1 >= 11)
                 {
                     get_roll = Console.ReadLine();
-                    roll2[j] = Int16.Parse(get_roll);
+                    frame.roll_2 = Int16.Parse(get_roll);
                 }
             }
             return 0;
         }
 
-        int display_score(int j, int[] a, int[] b, int[] c, int d)
+        int display_score(List <Frame> frames)
         {
-            for (j = 0; j < 10; j++)
+            for (var j = 0; j < 10; j++)
             {
+                var f_rame = frames.ElementAt(j);
                 if (j != 9)
                 {
                     Console.Write($"{j + 1}) ");
-                    Console.WriteLine($"{a[j]}     {b[j]}            {c[j]}");
+                    Console.WriteLine($"{f_rame.roll_1}     {f_rame.roll_2}            {f_rame.frame_score}");
                 }
                 else
                 {
                     Console.Write($"{j + 1}) ");
-                    Console.WriteLine($"{a[j]}     {b[j]}     {d}      {c[j]}");
+                    Console.WriteLine($"{f_rame.roll_1}     {f_rame.roll_2}     {f_rame.roll_3}      {f_rame.frame_score}");
                 }
             }
             return 0;
