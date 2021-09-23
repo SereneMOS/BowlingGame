@@ -19,8 +19,6 @@ namespace BowlingGame
             Console.Clear();
             int total_score = 0;
             var frames = new List<Frame>();
-            //int i;
-            //var f_rame = new Frame();
             for (var i = 0; i < 10; i++)
             {
                 var frame = new Frame();
@@ -51,15 +49,15 @@ namespace BowlingGame
                     finalspare(frame, are_we_rand);
                     finalstrike(frame, are_we_rand);
                 }
-                total_score += frame.roll_1 + frame.roll_2 + (frame.roll_3 + 1);                //final frame exception needed
-                frame.frame_score = frame.roll_1 + frame.roll_2 + (frame.roll_3 + 1);
+                total_score += frame.roll_1 + frame.roll_2 + frame.roll_3;                //final frame exception needed
+                Console.WriteLine(total_score);
+                frame.frame_score = frame.roll_1 + frame.roll_2 + frame.roll_3;
             }
             Console.Clear();
             Console.WriteLine("    1st   2nd   3rd   Frame");
             Console.WriteLine("-----------------------------");
             display_score(frames);
             Console.WriteLine(total_score);
-            //again(playing);
         }
 
 
@@ -84,7 +82,7 @@ namespace BowlingGame
                 if (que_rand == "I")
                 {
                     string get_roll = "";
-                    while (frame.roll_3 <= -1 || frame.roll_3 >= 11)
+                    while (frame.roll_3 <= 0 || frame.roll_3 >= 11)
                     {
                         get_roll = Console.ReadLine();
                         frame.roll_3 = Int16.Parse(get_roll);
@@ -106,12 +104,12 @@ namespace BowlingGame
                 if (que_rand == "I")
                 {
                     string get_roll = "";
-                    while (frame.roll_2 <= -1 || frame.roll_2 + frame.roll_1 >= 11)
+                    while (frame.roll_2 <= 0 || frame.roll_2 + frame.roll_1 >= 11)
                     {
                         get_roll = Console.ReadLine();
                         frame.roll_2 = Int16.Parse(get_roll);
                     }
-                    while (frame.roll_3 <= -1 || frame.roll_3 >= 11)
+                    while (frame.roll_3 <= 0 || frame.roll_3 >= 11)
                     {
                         get_roll = Console.ReadLine();
                         frame.roll_3 = Int16.Parse(get_roll);
@@ -129,7 +127,7 @@ namespace BowlingGame
         int roll_ball_1(Frame frame)
         {
             string get_roll = "";
-            while (frame.roll_1 <= -1 || frame.roll_1 >= 11)
+            while (frame.roll_1 <= 0 || frame.roll_1 >= 11)
             {
                 get_roll = Console.ReadLine();
                 frame.roll_1 = Int16.Parse(get_roll);
@@ -143,7 +141,7 @@ namespace BowlingGame
             if (frame.roll_1 != 10)
             {
                 string get_roll = "";
-                while (frame.roll_2 <= -1 || frame.roll_2 + frame.roll_1 >= 11)
+                while (frame.roll_2 <= 0 || frame.roll_2 + frame.roll_1 >= 11)
                 {
                     get_roll = Console.ReadLine();
                     frame.roll_2 = Int16.Parse(get_roll);
