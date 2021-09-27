@@ -17,7 +17,6 @@ namespace BowlingGame
                 are_we_rand = Console.ReadLine();
             }
             Console.Clear();
-            int total_score = 0;
             var frames = new List<Frame>();
             for (var i = 0; i < 10; i++)
             {
@@ -49,27 +48,27 @@ namespace BowlingGame
                     finalspare(frame, are_we_rand);
                     finalstrike(frame, are_we_rand);
                 }
-                total_score += frame.roll_1 + frame.roll_2 + frame.roll_3;                //final frame exception needed
-                Console.WriteLine(total_score);
                 frame.frame_score = frame.roll_1 + frame.roll_2 + frame.roll_3;
             }
             Console.Clear();
             Console.WriteLine("    1st   2nd   3rd   Frame");
             Console.WriteLine("-----------------------------");
             display_score(frames);
-            Console.WriteLine(total_score);
         }
 
 
         int sparestrike(Frame frame, Frame previous_frame)
         {
+            
             if (previous_frame.roll_1 + previous_frame.roll_2 == 10 && previous_frame.roll_1 != 10)
             {
                 previous_frame.frame_score += frame.roll_1;
-            }
+            } 
             if (previous_frame.roll_1 == 10)
             {
-                previous_frame.frame_score += previous_frame.roll_1 + previous_frame.roll_2;
+                Console.WriteLine(previous_frame.frame_score);
+                previous_frame.frame_score += frame.roll_1 + frame.roll_2;
+                Console.WriteLine(previous_frame.frame_score);
             }
             return 0;
         }
@@ -118,7 +117,7 @@ namespace BowlingGame
                 if (que_rand == "R")
                 {
                     frame.roll_2 = rd.Next(0, 11);
-                    frame.roll_3 = 5; //rd.Next(0, 11);
+                    frame.roll_3 = rd.Next(0, 11);
                 }
             }
             return 0;
@@ -152,9 +151,11 @@ namespace BowlingGame
 
         int display_score(List <Frame> frames)
         {
+            int total_score = 0;
             for (var j = 0; j < 10; j++)
             {
                 var f_rame = frames.ElementAt(j);
+                total_score += f_rame.frame_score;
                 if (j != 9)
                 {
                     Console.Write($"{j + 1}) ");
@@ -166,6 +167,7 @@ namespace BowlingGame
                     Console.WriteLine($"{f_rame.roll_1}     {f_rame.roll_2}     {f_rame.roll_3}      {f_rame.frame_score}");
                 }
             }
+            Console.WriteLine(total_score);
             return 0;
         }
     }
