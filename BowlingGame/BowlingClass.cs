@@ -8,21 +8,29 @@ namespace BowlingGame
 {
     public class BowlingClass
     {
+        private IPlayerInput _player;
+        public BowlingClass (IPlayerInput Input)
+        {
+            _player = Input;
+        }
         public void Play()
         {
-            string are_we_rand = "";
+            //string are_we_rand = "";
+            /*
             while (are_we_rand != "I" && are_we_rand != "R")
             {
                 Console.WriteLine("Would you like to use random rolls or input rolls? (R/I)");
                 are_we_rand = Console.ReadLine();
             }
+            */
             Console.Clear();
             var frames = new List<Frame>();
             for (var i = 0; i < 10; i++)
             {
                 var frame = new Frame();
                 frames.Add(frame);
-                Random rd = new Random();
+                //Random rd = new Random();
+                /*
                 if (are_we_rand == "I")
                 {
                     roll_ball_1(frame);
@@ -34,7 +42,9 @@ namespace BowlingGame
                     frame.roll_1 = rd.Next(0, 11);
                     frame.roll_2 = rd.Next(0, (10 - frame.roll_1) + 1);
                 }
-
+                */
+                frame.roll_1 = _player.get_roll(10);
+                frame.roll_2 = _player.get_roll(frame.roll_1);
                 if (frame.roll_1 == 10)
                 {
                     frame.roll_2 = 0;
@@ -45,8 +55,8 @@ namespace BowlingGame
                 }
                 if (i == 9)
                 {
-                    finalspare(frame, are_we_rand);
-                    finalstrike(frame, are_we_rand);
+                    finalspare(frame);
+                    finalstrike(frame);
                 }
                 frame.frame_score = frame.roll_1 + frame.roll_2 + frame.roll_3;
             }
@@ -73,11 +83,12 @@ namespace BowlingGame
             return 0;
         }
 
-        static int finalspare(Frame frame, string que_rand)
+        private int finalspare(Frame frame)
         {
-            Random rd = new Random();
+          //  Random rd = new Random();
             if (frame.roll_1 + frame.roll_2 == 10 && frame.roll_1 != 10) //final frame spare
             {
+                /*
                 if (que_rand == "I")
                 {
                     string get_roll = "";
@@ -91,15 +102,18 @@ namespace BowlingGame
                 {
                     frame.roll_3 = rd.Next(0, 11);
                 }
+                */
+                frame.roll_3 = _player.get_roll(10);
             }
             return 0;
         }
 
-        static int finalstrike(Frame frame, string que_rand)
+        private int finalstrike(Frame frame)
         {
-            Random rd = new Random();
+            //Random rd = new Random();
             if (frame.roll_1 == 10) //final frame strike
             {
+                /*
                 if (que_rand == "I")
                 {
                     string get_roll = "";
@@ -119,6 +133,9 @@ namespace BowlingGame
                     frame.roll_2 = rd.Next(0, 11);
                     frame.roll_3 = rd.Next(0, 11);
                 }
+                */
+                frame.roll_2 = _player.get_roll(frame.roll_1);
+                frame.roll_3 = _player.get_roll(10);
             }
             return 0;
         }

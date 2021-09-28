@@ -9,7 +9,22 @@ namespace BowlingGame
             bool playing = true;
             while (playing)
             {
-                var game = new BowlingClass();
+                string are_we_rand = "";
+                IPlayerInput Input = null;
+                while (are_we_rand != "I" && are_we_rand != "R")
+                {
+                    Console.WriteLine("Would you like to use random rolls or input rolls? (R/I)");
+                    are_we_rand = Console.ReadLine();
+                }
+                if (are_we_rand == "R")
+                {
+                    Input = new RandomInput();
+                }
+                if (are_we_rand == "I")
+                {
+                    Input = new KeyInput();
+                }
+                var game = new BowlingClass(Input);
                 game.Play();
                 playing = ask_to_play_again();
             }
