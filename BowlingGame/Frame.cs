@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BowlingGame
 {
     public class Frame
-    {
+    {                           //frame dependent variables
         public int roll_1 = 0;
         public int roll_2 = 0;
         public int frame_score = 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BowlingGame
 {
-    public class RandomInput : IPlayerInput
+    public class RandomInput : IPlayerInput //logic for randomly generated rolls
     {
         private Random _rand = new Random();
         public int get_roll(int NumPinsRemaining)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BowlingGame
 {
-    public interface IPlayerInput
+    public interface IPlayerInput //player input interface
     {
         int get_roll(int NumPinsRemaining);
     }
