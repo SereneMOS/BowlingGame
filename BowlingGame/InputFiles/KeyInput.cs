@@ -11,12 +11,20 @@ namespace BowlingGame
         public int get_roll(int NumPinsRemaining)
         {
             int roll = 0;
-            while (roll <= 0 || roll >= 11 || roll !> NumPinsRemaining) //ensures the user cannot input a value below 0, above 10, or a value that is 
-            {                                                              //larger than the first roll and the second combined
+            //while (roll <= 0 || roll >= 11 || roll !> NumPinsRemaining) //ensures the user cannot input a value below 0, above 10, or a value that is 
+            //{                                                              //larger than the first roll and the second combined
+            // TODO: while (CheckValidation())  {call get roll}
                 string get_roll = Console.ReadLine();
-                roll = Int16.Parse(get_roll);
-            }
+                roll = Int16.Parse(get_roll) ;
+
+            //}
             return roll;
+        }
+
+        private bool CheckValidation()
+        {
+            // put logic here
+            return false;
         }
     }
 }

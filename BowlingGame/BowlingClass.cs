@@ -25,10 +25,9 @@ namespace BowlingGame
                 var frame = new Frame();
                 frames.Add(frame);
                 frame.roll_1 = _player.get_roll(10);         //calls upon the Input class in the IPlayerInput interface and rolls for the values of this frame.
-                frame.roll_2 = _player.get_roll(10 - frame.roll_1);
-                if (frame.roll_1 == 10) //nullifies the value of the second roll on a strike
+                if (frame.roll_1 != 10) //nullifies the value of the second roll on a strike
                 {
-                    frame.roll_2 = 0;
+                    frame.roll_2 = _player.get_roll(10 - frame.roll_1);
                 }
                 if (i != 0)
                 {
